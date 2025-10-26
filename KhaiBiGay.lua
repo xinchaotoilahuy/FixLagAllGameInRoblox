@@ -1,19 +1,13 @@
 --------------------------------------------------------------------
 ------------------------[ LAG REDUCER SCRIPT ]-----------------------
---// 💀 LagFix MAX Overkill — by PhanGiaHuy x GPT-5
--- Cảnh báo: sau khi chạy, bạn gần như KHÔNG thấy gì. Game vẫn chạy, cực nhẹ.
+--// ⚙️ LagFix Auto (No GUI) — by PhanGiaHuy x GPT-5
+-- khi chạy script này => toàn bộ đồ họa sẽ bị tắt gần như hoàn toàn
+-- game vẫn hoạt động bình thường, dùng để treo / hack / auto nhẹ FPS cao nhất
 
 local Lighting = game:GetService("Lighting")
-local Terrain = workspace:FindFirstChildOfClass("Terrain")
 
--- ⚙️ Xóa & tắt mọi hiệu ứng trong Lighting
+-- tắt hiệu ứng ánh sáng
 pcall(function()
-	for _,v in ipairs(Lighting:GetChildren()) do
-		if v:IsA("Sky") or v:IsA("Atmosphere") or v:IsA("BloomEffect") or v:IsA("ColorCorrectionEffect")
-		or v:IsA("SunRaysEffect") or v:IsA("DepthOfFieldEffect") or v:IsA("BlurEffect") then
-			v:Destroy()
-		end
-	end
 	Lighting.GlobalShadows = false
 	Lighting.Brightness = 0
 	Lighting.FogEnd = 9e9
@@ -21,76 +15,54 @@ pcall(function()
 	Lighting.ClockTime = 12
 	Lighting.Ambient = Color3.new(1,1,1)
 	Lighting.OutdoorAmbient = Color3.new(1,1,1)
-	Lighting.EnvironmentDiffuseScale = 0
-	Lighting.EnvironmentSpecularScale = 0
-end)
-
--- ⚙️ Tắt terrain + water + grass
-pcall(function()
-	if Terrain then
-		Terrain.WaterReflectance = 0
-		Terrain.WaterTransparency = 1
-		Terrain.WaterWaveSize = 0
-		Terrain.WaterWaveSpeed = 0
-		Terrain.Decoration = false
+	for _,v in ipairs(Lighting:GetChildren()) do
+		if v:IsA("Sky") or v:IsA("Atmosphere") or v:IsA("BloomEffect") or v:IsA("ColorCorrectionEffect")
+		or v:IsA("SunRaysEffect") or v:IsA("DepthOfFieldEffect") or v:IsA("BlurEffect") then
+			v:Destroy()
+		end
 	end
 end)
 
--- ⚙️ Xử lý toàn map
+-- tắt toàn bộ texture, decal, effect, particle
 for _,v in ipairs(game:GetDescendants()) do
 	pcall(function()
 		if v:IsA("BasePart") then
-			v.Material = Enum.Material.SmoothPlastic
+			v.Material = Enum.Material.Plastic
 			v.Reflectance = 0
 			v.CastShadow = false
-			v.LocalTransparencyModifier = 1
-			v.Color = Color3.new(1,1,1)
+			v.LocalTransparencyModifier = 1 -- gần như vô hình
 		elseif v:IsA("Decal") or v:IsA("Texture") then
 			v.Transparency = 1
 		elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Beam")
-			or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") then
-			v.Enabled = false
-		elseif v:IsA("MeshPart") then
-			v.Transparency = 1
-			v.CastShadow = false
-		elseif v:IsA("SurfaceAppearance") then
-			v:Destroy()
-		elseif v:IsA("PointLight") or v:IsA("SpotLight") or v:IsA("SurfaceLight") then
+			or v:IsA("Smoke") or v:IsA("Fire") or v:IsA("Sparkles") then
 			v.Enabled = false
 		end
 	end)
 end
 
--- ⚙️ Xóa Billboard, LightEffect, UI ảo
-for _,v in ipairs(workspace:GetDescendants()) do
-	pcall(function()
-		if v:IsA("BillboardGui") or v:IsA("SurfaceGui") then
-			v.Enabled = false
-		end
-	end)
-end
+-- tắt hiệu ứng GUI blur hoặc effect khác nếu có
+pcall(function()
+	game:GetService("StarterGui"):SetCore("TopbarEnabled", true)
+end)
 
--- ⚙️ Tự động fix cho vật thể spawn sau
+-- tiếp tục theo dõi đối tượng mới để tự động làm mờ
 game.DescendantAdded:Connect(function(v)
 	pcall(function()
 		if v:IsA("BasePart") then
-			v.Material = Enum.Material.SmoothPlastic
+			v.Material = Enum.Material.Plastic
+			v.Reflectance = 0
 			v.CastShadow = false
 			v.LocalTransparencyModifier = 1
 		elseif v:IsA("Decal") or v:IsA("Texture") then
 			v.Transparency = 1
 		elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Beam")
-			or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") then
-			v.Enabled = false
-		elseif v:IsA("SurfaceAppearance") then
-			v:Destroy()
-		elseif v:IsA("PointLight") or v:IsA("SpotLight") or v:IsA("SurfaceLight") then
+			or v:IsA("Smoke") or v:IsA("Fire") or v:IsA("Sparkles") then
 			v.Enabled = false
 		end
 	end)
 end)
 
-print("[💀] LagFix MAX Overkill active — graphics totally nuked. FPS MAXED.")
+print("[✅] LagFix Auto: Graphics fully disabled. FPS Boosted to max.")
 --------------------------------------------------------------------
 --------------------------[ FPS + PING GUI KÍNH ]--------------------
 --// Dynamic Island Hover + Soft Shadow — by PhanGiaHuy x GPT-5 🍎
