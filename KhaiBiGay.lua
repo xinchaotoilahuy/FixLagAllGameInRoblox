@@ -42,8 +42,8 @@ local function cinematicShow(txt,time,dur)
 	task.wait(dur or 0)
 end
 
-cinematicShow("Script Fix Lag by VNTK",0.9,0.25)
-cinematicShow("Enjoy :))",0.45,0.25)
+cinematicShow("Script Fix Lag by VNTK",1.4,0.25)
+cinematicShow("Enjoy :))",0.7,0.25)
 
 TweenService:Create(blur,TweenInfo.new(1.3,Enum.EasingStyle.Sine),{Size=0}):Play()
 task.wait(1.3)
