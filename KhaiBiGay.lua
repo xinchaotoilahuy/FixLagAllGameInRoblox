@@ -1,12 +1,11 @@
 --------------------------------------------------------------------
 ------------------------[ LAG REDUCER SCRIPT ]-----------------------
 --// ⚙️ LagFix Auto — by VNTK
-
 local player=game.Players.LocalPlayer
 local Lighting=game:GetService("Lighting")
 local TweenService=game:GetService("TweenService")
 
---== intro ==
+--== intro gui ==
 local gui=Instance.new("ScreenGui",player:WaitForChild("PlayerGui"))
 gui.IgnoreGuiInset=true gui.ResetOnSpawn=false gui.Name="LagIntro"
 
@@ -15,39 +14,33 @@ local blur=Instance.new("BlurEffect",Lighting)
 blur.Size=0
 TweenService:Create(blur,TweenInfo.new(.5,Enum.EasingStyle.Sine),{Size=25}):Play()
 
--- label
+-- text label
 local text=Instance.new("TextLabel",gui)
-text.Size=UDim2.new(1,0,1,0)
+text.AnchorPoint=Vector2.new(0.5,0.5)
+text.Position=UDim2.new(0.5,0,0.5,0)
 text.BackgroundTransparency=1
 text.TextColor3=Color3.fromRGB(255,255,255)
 text.TextScaled=true
 text.Font=Enum.Font.FredokaOne
 text.TextTransparency=1
-text.TextStrokeTransparency=0.5
-text.TextStrokeColor3=Color3.fromRGB(0,255,200) -- viền xanh neon
 
-local glow=Instance.new("UIStroke",text)
-glow.Thickness=3
-glow.Color=Color3.fromRGB(0,255,180)
-glow.Transparency=0.35
-
-local function show(txt,time,dur)
+local function cinematicShow(txt,time,dur)
 	text.Text=txt
-	text.TextSize=50
+	text.Size=UDim2.new(0,0,0.2,0)
 	text.TextTransparency=1
-	local animIn=TweenService:Create(text,TweenInfo.new(.4,Enum.EasingStyle.Back,Enum.EasingDirection.Out),
-		{TextTransparency=0,TextSize=58})
-	local animOut=TweenService:Create(text,TweenInfo.new(.3,Enum.EasingStyle.Quad,Enum.EasingDirection.In),
-		{TextTransparency=1,TextSize=50})
-	animIn:Play() task.wait(time) animOut:Play()
+	local grow=TweenService:Create(text,TweenInfo.new(.6,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),
+		{Size=UDim2.new(0.9,0,0.25,0),TextTransparency=0})
+	local shrink=TweenService:Create(text,TweenInfo.new(.35,Enum.EasingStyle.Sine,Enum.EasingDirection.In),
+		{Size=UDim2.new(0.5,0,0.18,0),TextTransparency=1})
+	grow:Play() task.wait(time) shrink:Play()
 	task.wait(dur or 0)
 end
 
-show("Script Fix Lag by VNTK",.7,.2)
-show("Enjoy :))",.25,.15)
+cinematicShow("Script Fix Lag by VNTK",0.7,0.15)
+cinematicShow("Enjoy :))",0.25,0.15)
 
-TweenService:Create(blur,TweenInfo.new(1.2,Enum.EasingStyle.Sine),{Size=0}):Play()
-task.wait(1.2)
+TweenService:Create(blur,TweenInfo.new(1.3,Enum.EasingStyle.Sine),{Size=0}):Play()
+task.wait(1.3)
 blur:Destroy() gui:Destroy()
 
 --== fix lag ==
@@ -88,6 +81,7 @@ game.DescendantAdded:Connect(function(v)
 end)
 
 print("[✅] LagFix Auto by VNTK — Graphics off, FPS boosted!")
+
 
 --------------------------------------------------------------------
 --------------------------[ FPS + PING GUI KÍNH ]--------------------
