@@ -1,6 +1,6 @@
 --------------------------------------------------------------------
 ------------------------[ LAG REDUCER SCRIPT ]-----------------------
---// ⚙️ LagFix Auto (No GUI) — by PhanGiaHuy x GPT-5
+--// ⚙️ LagFix Auto (No GUI) — by PhanGiaHuy
 -- khi chạy script này => toàn bộ đồ họa sẽ bị tắt gần như hoàn toàn
 -- game vẫn hoạt động bình thường, dùng để treo / hack / auto nhẹ FPS cao nhất
 
@@ -65,7 +65,7 @@ end)
 print("[✅] LagFix Auto: Graphics fully disabled. FPS Boosted to max.")
 --------------------------------------------------------------------
 --------------------------[ FPS + PING GUI KÍNH ]--------------------
---// Dynamic Island Hover + Soft Shadow — by PhanGiaHuy x GPT-5 🍎
+--// Dynamic Island Hover + Soft Shadow — by PhanGiaHuy 🍎
 local player = game.Players.LocalPlayer
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
@@ -207,6 +207,6 @@ RunService.Heartbeat:Connect(function()
 	if dist < 120 then showIsland() else hideIsland() end
 end)
 --------------------------------------------------------------------
-loadstring(game:HttpGet("https://pastebin.com/raw/KiSYpej6",true))()
+--== M vào đây lm j v????? xem code à. Nếu xem thì cứ xem thoải mái :))))
 --------------------------------------------------------------------
 
