@@ -1,7 +1,6 @@
 --------------------------------------------------------------------
 ------------------------[ LAG REDUCER SCRIPT ]-----------------------
 --// ⚙️ LagFix Auto — by VNTK
-
 local player=game.Players.LocalPlayer
 local Lighting=game:GetService("Lighting")
 local TweenService=game:GetService("TweenService")
@@ -10,8 +9,10 @@ local TweenService=game:GetService("TweenService")
 local gui=Instance.new("ScreenGui",player:WaitForChild("PlayerGui"))
 gui.IgnoreGuiInset=true gui.ResetOnSpawn=false gui.Name="LagIntro"
 
+-- hiệu ứng làm mờ
 local blur=Instance.new("BlurEffect",Lighting)
-blur.Size=0 TweenService:Create(blur,TweenInfo.new(.3,Enum.EasingStyle.Sine),{Size=24}):Play()
+blur.Size=0
+TweenService:Create(blur,TweenInfo.new(.5,Enum.EasingStyle.Sine),{Size=25}):Play()
 
 local text=Instance.new("TextLabel",gui)
 text.Size=UDim2.new(1,0,1,0)
@@ -20,27 +21,29 @@ text.TextColor3=Color3.fromRGB(255,255,255)
 text.TextScaled=true
 text.Font=Enum.Font.GothamSemibold
 text.TextTransparency=1
-text.TextStrokeTransparency=0.3
-text.TextStrokeColor3=Color3.fromRGB(0,0,0)
+text.TextStrokeTransparency=0.5
+text.TextStrokeColor3=Color3.fromRGB(0,255,200) -- viền xanh cyan
 
 local glow=Instance.new("UIStroke",text)
-glow.Thickness=2
-glow.Color=Color3.fromRGB(100,255,255)
+glow.Thickness=2.5
+glow.Color=Color3.fromRGB(0,255,180)
 glow.Transparency=0.4
 
 local function show(txt,time,dur)
 	text.Text=txt
-	TweenService:Create(text,TweenInfo.new(.25,Enum.EasingStyle.Quad),{TextTransparency=0,TextSize=48}):Play()
+	TweenService:Create(text,TweenInfo.new(.3,Enum.EasingStyle.Sine,Enum.EasingDirection.Out),
+		{TextTransparency=0,TextSize=50}):Play()
 	task.wait(time)
-	TweenService:Create(text,TweenInfo.new(.2,Enum.EasingStyle.Quad),{TextTransparency=1}):Play()
+	TweenService:Create(text,TweenInfo.new(.25,Enum.EasingStyle.Sine,Enum.EasingDirection.In),
+		{TextTransparency=1}):Play()
 	task.wait(dur or 0)
 end
 
-show("Script Fix Lag by VNTK",.35,.1)
-show("Ẹnjoy :))",.25,.1)
+show("Script Fix Lag by VNTK",.7,.15) -- chữ đầu 0.7 giây
+show("Ẹnjoy :))",.25,.15)
 
-TweenService:Create(blur,TweenInfo.new(1,Enum.EasingStyle.Sine),{Size=0}):Play()
-task.wait(1)
+TweenService:Create(blur,TweenInfo.new(1.2,Enum.EasingStyle.Sine),{Size=0}):Play()
+task.wait(1.2)
 blur:Destroy() gui:Destroy()
 
 --== fix lag ==
@@ -80,7 +83,8 @@ game.DescendantAdded:Connect(function(v)
 	end)
 end)
 
-print("[✅] LagFix Auto by VNTK — All graphics disabled, FPS boosted!")
+print("[✅] LagFix Auto by VNTK — Graphics off, FPS boosted!")
+
 --------------------------------------------------------------------
 --------------------------[ FPS + PING GUI KÍNH ]--------------------
 --// Dynamic Island Hover + Soft Shadow — by PhanGiaHuy 🍎
