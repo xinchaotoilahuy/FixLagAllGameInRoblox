@@ -1,6 +1,7 @@
 --------------------------------------------------------------------
 ------------------------[ LAG REDUCER SCRIPT ]-----------------------
 --// ⚙️ LagFix Auto — by VNTK
+
 local player=game.Players.LocalPlayer
 local Lighting=game:GetService("Lighting")
 local TweenService=game:GetService("TweenService")
@@ -9,38 +10,41 @@ local TweenService=game:GetService("TweenService")
 local gui=Instance.new("ScreenGui",player:WaitForChild("PlayerGui"))
 gui.IgnoreGuiInset=true gui.ResetOnSpawn=false gui.Name="LagIntro"
 
--- hiệu ứng làm mờ
+-- blur nền
 local blur=Instance.new("BlurEffect",Lighting)
 blur.Size=0
 TweenService:Create(blur,TweenInfo.new(.5,Enum.EasingStyle.Sine),{Size=25}):Play()
 
+-- label
 local text=Instance.new("TextLabel",gui)
 text.Size=UDim2.new(1,0,1,0)
 text.BackgroundTransparency=1
 text.TextColor3=Color3.fromRGB(255,255,255)
 text.TextScaled=true
-text.Font=Enum.Font.GothamSemibold
+text.Font=Enum.Font.FredokaOne
 text.TextTransparency=1
 text.TextStrokeTransparency=0.5
-text.TextStrokeColor3=Color3.fromRGB(0,255,200) -- viền xanh cyan
+text.TextStrokeColor3=Color3.fromRGB(0,255,200) -- viền xanh neon
 
 local glow=Instance.new("UIStroke",text)
-glow.Thickness=2.5
+glow.Thickness=3
 glow.Color=Color3.fromRGB(0,255,180)
-glow.Transparency=0.4
+glow.Transparency=0.35
 
 local function show(txt,time,dur)
 	text.Text=txt
-	TweenService:Create(text,TweenInfo.new(.3,Enum.EasingStyle.Sine,Enum.EasingDirection.Out),
-		{TextTransparency=0,TextSize=50}):Play()
-	task.wait(time)
-	TweenService:Create(text,TweenInfo.new(.25,Enum.EasingStyle.Sine,Enum.EasingDirection.In),
-		{TextTransparency=1}):Play()
+	text.TextSize=50
+	text.TextTransparency=1
+	local animIn=TweenService:Create(text,TweenInfo.new(.4,Enum.EasingStyle.Back,Enum.EasingDirection.Out),
+		{TextTransparency=0,TextSize=58})
+	local animOut=TweenService:Create(text,TweenInfo.new(.3,Enum.EasingStyle.Quad,Enum.EasingDirection.In),
+		{TextTransparency=1,TextSize=50})
+	animIn:Play() task.wait(time) animOut:Play()
 	task.wait(dur or 0)
 end
 
-show("Script Fix Lag by VNTK",.7,.15) -- chữ đầu 0.7 giây
-show("Ẹnjoy :))",.25,.15)
+show("Script Fix Lag by VNTK",.7,.2)
+show("Enjoy :))",.25,.15)
 
 TweenService:Create(blur,TweenInfo.new(1.2,Enum.EasingStyle.Sine),{Size=0}):Play()
 task.wait(1.2)
