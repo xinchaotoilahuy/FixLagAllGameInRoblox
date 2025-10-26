@@ -1,68 +1,86 @@
 --------------------------------------------------------------------
 ------------------------[ LAG REDUCER SCRIPT ]-----------------------
---// ⚙️ LagFix Auto (No GUI) — by PhanGiaHuy
--- khi chạy script này => toàn bộ đồ họa sẽ bị tắt gần như hoàn toàn
--- game vẫn hoạt động bình thường, dùng để treo / hack / auto nhẹ FPS cao nhất
+--// ⚙️ LagFix Auto — by VNTK
 
-local Lighting = game:GetService("Lighting")
+local player=game.Players.LocalPlayer
+local Lighting=game:GetService("Lighting")
+local TweenService=game:GetService("TweenService")
 
--- tắt hiệu ứng ánh sáng
+--== intro ==
+local gui=Instance.new("ScreenGui",player:WaitForChild("PlayerGui"))
+gui.IgnoreGuiInset=true gui.ResetOnSpawn=false gui.Name="LagIntro"
+
+local blur=Instance.new("BlurEffect",Lighting)
+blur.Size=0 TweenService:Create(blur,TweenInfo.new(.3,Enum.EasingStyle.Sine),{Size=24}):Play()
+
+local text=Instance.new("TextLabel",gui)
+text.Size=UDim2.new(1,0,1,0)
+text.BackgroundTransparency=1
+text.TextColor3=Color3.fromRGB(255,255,255)
+text.TextScaled=true
+text.Font=Enum.Font.GothamSemibold
+text.TextTransparency=1
+text.TextStrokeTransparency=0.3
+text.TextStrokeColor3=Color3.fromRGB(0,0,0)
+
+local glow=Instance.new("UIStroke",text)
+glow.Thickness=2
+glow.Color=Color3.fromRGB(100,255,255)
+glow.Transparency=0.4
+
+local function show(txt,time,dur)
+	text.Text=txt
+	TweenService:Create(text,TweenInfo.new(.25,Enum.EasingStyle.Quad),{TextTransparency=0,TextSize=48}):Play()
+	task.wait(time)
+	TweenService:Create(text,TweenInfo.new(.2,Enum.EasingStyle.Quad),{TextTransparency=1}):Play()
+	task.wait(dur or 0)
+end
+
+show("Script Fix Lag by VNTK",.35,.1)
+show("Ẹnjoy :))",.25,.1)
+
+TweenService:Create(blur,TweenInfo.new(1,Enum.EasingStyle.Sine),{Size=0}):Play()
+task.wait(1)
+blur:Destroy() gui:Destroy()
+
+--== fix lag ==
 pcall(function()
-	Lighting.GlobalShadows = false
-	Lighting.Brightness = 0
-	Lighting.FogEnd = 9e9
-	Lighting.FogStart = 0
-	Lighting.ClockTime = 12
-	Lighting.Ambient = Color3.new(1,1,1)
-	Lighting.OutdoorAmbient = Color3.new(1,1,1)
-	for _,v in ipairs(Lighting:GetChildren()) do
-		if v:IsA("Sky") or v:IsA("Atmosphere") or v:IsA("BloomEffect") or v:IsA("ColorCorrectionEffect")
-		or v:IsA("SunRaysEffect") or v:IsA("DepthOfFieldEffect") or v:IsA("BlurEffect") then
-			v:Destroy()
-		end
+	Lighting.GlobalShadows=false
+	Lighting.Brightness=0
+	Lighting.FogEnd=9e9
+	Lighting.FogStart=0
+	Lighting.ClockTime=12
+	Lighting.Ambient=Color3.new(1,1,1)
+	Lighting.OutdoorAmbient=Color3.new(1,1,1)
+	for _,v in ipairs(Lighting:GetChildren())do
+		if v:IsA("Sky")or v:IsA("Atmosphere")or v:IsA("BloomEffect")
+		or v:IsA("ColorCorrectionEffect")or v:IsA("SunRaysEffect")
+		or v:IsA("DepthOfFieldEffect")or v:IsA("BlurEffect")then v:Destroy()end
 	end
 end)
 
--- tắt toàn bộ texture, decal, effect, particle
-for _,v in ipairs(game:GetDescendants()) do
+for _,v in ipairs(game:GetDescendants())do
 	pcall(function()
-		if v:IsA("BasePart") then
-			v.Material = Enum.Material.Plastic
-			v.Reflectance = 0
-			v.CastShadow = false
-			v.LocalTransparencyModifier = 1 -- gần như vô hình
-		elseif v:IsA("Decal") or v:IsA("Texture") then
-			v.Transparency = 1
-		elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Beam")
-			or v:IsA("Smoke") or v:IsA("Fire") or v:IsA("Sparkles") then
-			v.Enabled = false
+		if v:IsA("BasePart")then
+			v.Material=Enum.Material.Plastic v.CastShadow=false v.Reflectance=0 v.LocalTransparencyModifier=1
+		elseif v:IsA("Decal")or v:IsA("Texture")then v.Transparency=1
+		elseif v:IsA("ParticleEmitter")or v:IsA("Trail")or v:IsA("Beam")
+		or v:IsA("Smoke")or v:IsA("Fire")or v:IsA("Sparkles")then v.Enabled=false
 		end
 	end)
 end
 
--- tắt hiệu ứng GUI blur hoặc effect khác nếu có
-pcall(function()
-	game:GetService("StarterGui"):SetCore("TopbarEnabled", true)
-end)
-
--- tiếp tục theo dõi đối tượng mới để tự động làm mờ
 game.DescendantAdded:Connect(function(v)
 	pcall(function()
-		if v:IsA("BasePart") then
-			v.Material = Enum.Material.Plastic
-			v.Reflectance = 0
-			v.CastShadow = false
-			v.LocalTransparencyModifier = 1
-		elseif v:IsA("Decal") or v:IsA("Texture") then
-			v.Transparency = 1
-		elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Beam")
-			or v:IsA("Smoke") or v:IsA("Fire") or v:IsA("Sparkles") then
-			v.Enabled = false
-		end
+		if v:IsA("BasePart")then
+			v.Material=Enum.Material.Plastic v.CastShadow=false v.LocalTransparencyModifier=1
+		elseif v:IsA("Decal")or v:IsA("Texture")then v.Transparency=1
+		elseif v:IsA("ParticleEmitter")or v:IsA("Trail")or v:IsA("Beam")
+		or v:IsA("Smoke")or v:IsA("Fire")or v:IsA("Sparkles")then v.Enabled=false end
 	end)
 end)
 
-print("[✅] LagFix Auto: Graphics fully disabled. FPS Boosted to max.")
+print("[✅] LagFix Auto by VNTK — All graphics disabled, FPS boosted!")
 --------------------------------------------------------------------
 --------------------------[ FPS + PING GUI KÍNH ]--------------------
 --// Dynamic Island Hover + Soft Shadow — by PhanGiaHuy 🍎
