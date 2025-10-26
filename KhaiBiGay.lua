@@ -5,16 +5,16 @@ local player=game.Players.LocalPlayer
 local Lighting=game:GetService("Lighting")
 local TweenService=game:GetService("TweenService")
 
---== intro gui ==
+--== GUI setup ==
 local gui=Instance.new("ScreenGui",player:WaitForChild("PlayerGui"))
 gui.IgnoreGuiInset=true gui.ResetOnSpawn=false gui.Name="LagIntro"
 
--- blur nền
+-- hiệu ứng blur nền
 local blur=Instance.new("BlurEffect",Lighting)
 blur.Size=0
-TweenService:Create(blur,TweenInfo.new(.5,Enum.EasingStyle.Sine),{Size=25}):Play()
+TweenService:Create(blur,TweenInfo.new(.6,Enum.EasingStyle.Sine),{Size=25}):Play()
 
--- text label
+--== text ==
 local text=Instance.new("TextLabel",gui)
 text.AnchorPoint=Vector2.new(0.5,0.5)
 text.Position=UDim2.new(0.5,0,0.5,0)
@@ -24,26 +24,32 @@ text.TextScaled=true
 text.Font=Enum.Font.FredokaOne
 text.TextTransparency=1
 
+-- tạo glow nhẹ
+local glow=Instance.new("UIStroke",text)
+glow.Thickness=2
+glow.Color=Color3.fromRGB(0,180,255)
+glow.Transparency=0.4
+
 local function cinematicShow(txt,time,dur)
 	text.Text=txt
 	text.Size=UDim2.new(0,0,0.2,0)
 	text.TextTransparency=1
 	local grow=TweenService:Create(text,TweenInfo.new(.6,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),
 		{Size=UDim2.new(0.9,0,0.25,0),TextTransparency=0})
-	local shrink=TweenService:Create(text,TweenInfo.new(.35,Enum.EasingStyle.Sine,Enum.EasingDirection.In),
+	local shrink=TweenService:Create(text,TweenInfo.new(.4,Enum.EasingStyle.Sine,Enum.EasingDirection.In),
 		{Size=UDim2.new(0.5,0,0.18,0),TextTransparency=1})
 	grow:Play() task.wait(time) shrink:Play()
 	task.wait(dur or 0)
 end
 
-cinematicShow("Script Fix Lag by VNTK",0.7,0.15)
-cinematicShow("Enjoy :))",0.25,0.15)
+cinematicShow("Script Fix Lag by VNTK",0.9,0.25)
+cinematicShow("Enjoy :))",0.45,0.25)
 
 TweenService:Create(blur,TweenInfo.new(1.3,Enum.EasingStyle.Sine),{Size=0}):Play()
 task.wait(1.3)
 blur:Destroy() gui:Destroy()
 
---== fix lag ==
+--== Fix Lag ==
 pcall(function()
 	Lighting.GlobalShadows=false
 	Lighting.Brightness=0
@@ -80,9 +86,7 @@ game.DescendantAdded:Connect(function(v)
 	end)
 end)
 
-print("[✅] LagFix Auto by VNTK — Graphics off, FPS boosted!")
-
-
+print("[✅] LagFix Auto by VNTK — Ultra Performance Mode ON")
 --------------------------------------------------------------------
 --------------------------[ FPS + PING GUI KÍNH ]--------------------
 --// Dynamic Island Hover + Soft Shadow — by PhanGiaHuy 🍎
