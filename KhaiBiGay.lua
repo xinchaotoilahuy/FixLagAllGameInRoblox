@@ -1,18 +1,21 @@
 --------------------------------------------------------------------
 ------------------------[ LAG REDUCER SCRIPT ]-----------------------
---// ⚡ Ultimate LagFix + FX Cleaner — by VNTK
+--// ⚡ Ultimate LagFix + FX Cleaner + Cinematic Intro — by PhanGiaHuy x GPT-5 x VNTK
 
 local player=game.Players.LocalPlayer
 local Lighting=game:GetService("Lighting")
 local TweenService=game:GetService("TweenService")
 
---== GUI intro ==
+--== GUI setup ==
 local gui=Instance.new("ScreenGui",player:WaitForChild("PlayerGui"))
 gui.IgnoreGuiInset=true gui.ResetOnSpawn=false gui.Name="LagIntro"
 
+-- hiệu ứng blur nền
 local blur=Instance.new("BlurEffect",Lighting)
-blur.Size=0 TweenService:Create(blur,TweenInfo.new(.6,Enum.EasingStyle.Sine),{Size=25}):Play()
+blur.Size=0
+TweenService:Create(blur,TweenInfo.new(.6,Enum.EasingStyle.Sine),{Size=25}):Play()
 
+--== text ==
 local text=Instance.new("TextLabel",gui)
 text.AnchorPoint=Vector2.new(0.5,0.5)
 text.Position=UDim2.new(0.5,0,0.5,0)
@@ -22,8 +25,11 @@ text.TextScaled=true
 text.Font=Enum.Font.FredokaOne
 text.TextTransparency=1
 
+-- glow xanh nhẹ
 local glow=Instance.new("UIStroke",text)
-glow.Thickness=2 glow.Color=Color3.fromRGB(0,180,255) glow.Transparency=0.4
+glow.Thickness=2
+glow.Color=Color3.fromRGB(0,180,255)
+glow.Transparency=0.4
 
 local function cinematicShow(txt,time,dur)
 	text.Text=txt
@@ -33,9 +39,11 @@ local function cinematicShow(txt,time,dur)
 		{Size=UDim2.new(0.9,0,0.25,0),TextTransparency=0})
 	local shrink=TweenService:Create(text,TweenInfo.new(.4,Enum.EasingStyle.Sine,Enum.EasingDirection.In),
 		{Size=UDim2.new(0.5,0,0.18,0),TextTransparency=1})
-	grow:Play() task.wait(time) shrink:Play() task.wait(dur or 0)
+	grow:Play() task.wait(time) shrink:Play()
+	task.wait(dur or 0)
 end
 
+-- intro text
 cinematicShow("Script Fix Lag by VNTK",1.1,0.25)
 cinematicShow("Enjoy :))",0.65,0.25)
 
@@ -43,7 +51,7 @@ TweenService:Create(blur,TweenInfo.new(1.3,Enum.EasingStyle.Sine),{Size=0}):Play
 task.wait(1.3)
 blur:Destroy() gui:Destroy()
 
---== Lag Fix ==
+--== Fix Lag ==
 pcall(function()
 	Lighting.GlobalShadows=false
 	Lighting.Brightness=0
@@ -80,7 +88,7 @@ game.DescendantAdded:Connect(function(v)
 	end)
 end)
 
---== Xóa toàn bộ hiệu ứng chiêu ==
+--== ⚡ FX Cleaner ==
 local function clearFX(v)
 	pcall(function()
 		if v:IsA("ParticleEmitter") or v:IsA("Beam") or v:IsA("Trail") or v:IsA("Attachment")
@@ -91,11 +99,13 @@ local function clearFX(v)
 	end)
 end
 
+-- dọn sẵn
 for _,v in ipairs(game:GetDescendants()) do clearFX(v) end
+-- auto dọn hiệu ứng mới
 game.DescendantAdded:Connect(clearFX)
 
-print("[✅] LagFix + FX Cleaner ON — All effects removed, performance boosted.")
-
+print("[✅] FX Cleaner: Tất cả hiệu ứng chiêu đã bị xoá hoàn toàn.")
+print("[✅] LagFix Auto by VNTK — Ultra Performance Mode ON")
 --------------------------------------------------------------------
 --------------------------[ FPS + PING GUI KÍNH ]--------------------
 --// Dynamic Island Hover + Soft Shadow — by PhanGiaHuy 🍎
