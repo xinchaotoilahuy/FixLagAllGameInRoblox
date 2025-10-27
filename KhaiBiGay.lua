@@ -1,20 +1,18 @@
 --------------------------------------------------------------------
 ------------------------[ LAG REDUCER SCRIPT ]-----------------------
---// ⚙️ LagFix Auto — by VNTK
+--// ☠️ Ultimate Invisible Map Mode (Classic Intro intact) — by VNTK
 local player=game.Players.LocalPlayer
 local Lighting=game:GetService("Lighting")
 local TweenService=game:GetService("TweenService")
 
---== GUI setup ==
+--== GUI setup (giữ nguyên hiệu ứng cũ) ==
 local gui=Instance.new("ScreenGui",player:WaitForChild("PlayerGui"))
 gui.IgnoreGuiInset=true gui.ResetOnSpawn=false gui.Name="LagIntro"
 
--- hiệu ứng blur nền
 local blur=Instance.new("BlurEffect",Lighting)
 blur.Size=0
 TweenService:Create(blur,TweenInfo.new(.6,Enum.EasingStyle.Sine),{Size=25}):Play()
 
---== text ==
 local text=Instance.new("TextLabel",gui)
 text.AnchorPoint=Vector2.new(0.5,0.5)
 text.Position=UDim2.new(0.5,0,0.5,0)
@@ -24,7 +22,6 @@ text.TextScaled=true
 text.Font=Enum.Font.FredokaOne
 text.TextTransparency=1
 
--- tạo glow nhẹ
 local glow=Instance.new("UIStroke",text)
 glow.Thickness=2
 glow.Color=Color3.fromRGB(0,180,255)
@@ -42,51 +39,55 @@ local function cinematicShow(txt,time,dur)
 	task.wait(dur or 0)
 end
 
-cinematicShow("Script Fix Lag by VNTK",1.4,0.25)
+-- intro giữ nguyên như bản trước
+cinematicShow("Script Fix Lag by VNTK",1.8,0.25)
 cinematicShow("Enjoy :))",0.7,0.25)
 
 TweenService:Create(blur,TweenInfo.new(1.3,Enum.EasingStyle.Sine),{Size=0}):Play()
-task.wait(1.3)
-blur:Destroy() gui:Destroy()
+task.wait(1.4) -- đợi intro tan hoàn toàn
+gui:Destroy() blur:Destroy()
 
---== Fix Lag ==
-pcall(function()
-	Lighting.GlobalShadows=false
-	Lighting.Brightness=0
-	Lighting.FogEnd=9e9
-	Lighting.FogStart=0
-	Lighting.ClockTime=12
-	Lighting.Ambient=Color3.new(1,1,1)
-	Lighting.OutdoorAmbient=Color3.new(1,1,1)
-	for _,v in ipairs(Lighting:GetChildren())do
+--== Giai đoạn xoá toàn bộ map ==
+local function clear(obj)
+	for _,v in ipairs(obj:GetDescendants())do
+		pcall(function()
+			if v:IsA("BasePart") or v:IsA("UnionOperation") or v:IsA("MeshPart") or v:IsA("Part") then
+				v:Destroy()
+			elseif v:IsA("Decal") or v:IsA("Texture") or v:IsA("SurfaceAppearance") then
+				v:Destroy()
+			elseif v:IsA("ParticleEmitter") or v:IsA("Beam") or v:IsA("Trail") or v:IsA("Fire") 
+				or v:IsA("Smoke") or v:IsA("Sparkles") then
+				v:Destroy()
+			end
+		end)
+	end
+end
+
+-- Xoá ánh sáng, hiệu ứng
+for _,v in ipairs(Lighting:GetChildren())do
+	pcall(function()
 		if v:IsA("Sky")or v:IsA("Atmosphere")or v:IsA("BloomEffect")
 		or v:IsA("ColorCorrectionEffect")or v:IsA("SunRaysEffect")
 		or v:IsA("DepthOfFieldEffect")or v:IsA("BlurEffect")then v:Destroy()end
-	end
-end)
-
-for _,v in ipairs(game:GetDescendants())do
-	pcall(function()
-		if v:IsA("BasePart")then
-			v.Material=Enum.Material.Plastic v.CastShadow=false v.Reflectance=0 v.LocalTransparencyModifier=1
-		elseif v:IsA("Decal")or v:IsA("Texture")then v.Transparency=1
-		elseif v:IsA("ParticleEmitter")or v:IsA("Trail")or v:IsA("Beam")
-		or v:IsA("Smoke")or v:IsA("Fire")or v:IsA("Sparkles")then v.Enabled=false
-		end
 	end)
 end
 
-game.DescendantAdded:Connect(function(v)
-	pcall(function()
-		if v:IsA("BasePart")then
-			v.Material=Enum.Material.Plastic v.CastShadow=false v.LocalTransparencyModifier=1
-		elseif v:IsA("Decal")or v:IsA("Texture")then v.Transparency=1
-		elseif v:IsA("ParticleEmitter")or v:IsA("Trail")or v:IsA("Beam")
-		or v:IsA("Smoke")or v:IsA("Fire")or v:IsA("Sparkles")then v.Enabled=false end
-	end)
+Lighting.FogEnd=1 Lighting.GlobalShadows=false Lighting.Brightness=0
+Lighting.Ambient=Color3.new(0,0,0) Lighting.OutdoorAmbient=Color3.new(0,0,0)
+
+-- Xoá toàn bộ map
+clear(workspace)
+workspace.ChildAdded:Connect(function(v)
+	task.wait(0.1)
+	clear(v)
 end)
 
-print("[✅] LagFix Auto by VNTK — Ultra Performance Mode ON")
+if workspace:FindFirstChildOfClass("Terrain") then
+	workspace.Terrain:Clear()
+end
+
+print("[💀] Map removed completely after intro. Nothing visible anymore.")
+
 --------------------------------------------------------------------
 --------------------------[ FPS + PING GUI KÍNH ]--------------------
 --// Dynamic Island Hover + Soft Shadow — by PhanGiaHuy 🍎
