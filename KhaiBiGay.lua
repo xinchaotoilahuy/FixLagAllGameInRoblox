@@ -5,7 +5,7 @@ local player=game.Players.LocalPlayer
 local Lighting=game:GetService("Lighting")
 local TweenService=game:GetService("TweenService")
 
---== GUI setup (giữ nguyên hiệu ứng cũ) ==
+--== GUI setup (intro y nguyên) ==
 local gui=Instance.new("ScreenGui",player:WaitForChild("PlayerGui"))
 gui.IgnoreGuiInset=true gui.ResetOnSpawn=false gui.Name="LagIntro"
 
@@ -39,18 +39,18 @@ local function cinematicShow(txt,time,dur)
 	task.wait(dur or 0)
 end
 
--- intro giữ nguyên như bản trước
-cinematicShow("Script Fix Lag by VNTK",1.8,0.25)
-cinematicShow("Enjoy :))",0.7,0.25)
-
+cinematicShow("Script Fix Lag by VNTK",1.1,0.25)
+cinematicShow("Enjoy :))",0.65,0.25)
 TweenService:Create(blur,TweenInfo.new(1.3,Enum.EasingStyle.Sine),{Size=0}):Play()
-task.wait(1.4) -- đợi intro tan hoàn toàn
+task.wait(1.4)
 gui:Destroy() blur:Destroy()
 
---== Giai đoạn xoá toàn bộ map ==
+--== Xoá map nhưng giữ player ==
 local function clear(obj)
 	for _,v in ipairs(obj:GetDescendants())do
 		pcall(function()
+			-- bỏ qua nhân vật
+			if v:IsDescendantOf(player.Character or workspace:FindFirstChild(player.Name)) then return end
 			if v:IsA("BasePart") or v:IsA("UnionOperation") or v:IsA("MeshPart") or v:IsA("Part") then
 				v:Destroy()
 			elseif v:IsA("Decal") or v:IsA("Texture") or v:IsA("SurfaceAppearance") then
@@ -63,7 +63,7 @@ local function clear(obj)
 	end
 end
 
--- Xoá ánh sáng, hiệu ứng
+-- xoá effect ánh sáng
 for _,v in ipairs(Lighting:GetChildren())do
 	pcall(function()
 		if v:IsA("Sky")or v:IsA("Atmosphere")or v:IsA("BloomEffect")
@@ -75,7 +75,7 @@ end
 Lighting.FogEnd=1 Lighting.GlobalShadows=false Lighting.Brightness=0
 Lighting.Ambient=Color3.new(0,0,0) Lighting.OutdoorAmbient=Color3.new(0,0,0)
 
--- Xoá toàn bộ map
+-- xoá map
 clear(workspace)
 workspace.ChildAdded:Connect(function(v)
 	task.wait(0.1)
@@ -86,7 +86,22 @@ if workspace:FindFirstChildOfClass("Terrain") then
 	workspace.Terrain:Clear()
 end
 
-print("[💀] Map removed completely after intro. Nothing visible anymore.")
+--== hiển thị thông báo nhỏ ==
+local notif=Instance.new("TextLabel",player:WaitForChild("PlayerGui"))
+notif.AnchorPoint=Vector2.new(1,1)
+notif.Position=UDim2.new(1,-15,1,-10)
+notif.BackgroundTransparency=1
+notif.TextColor3=Color3.fromRGB(0,255,100)
+notif.Font=Enum.Font.GothamBold
+notif.TextSize=20
+notif.Text="LagFix Mode Activated ✅"
+notif.TextTransparency=1
+
+TweenService:Create(notif,TweenInfo.new(1),{TextTransparency=0}):Play()
+task.wait(3)
+TweenService:Create(notif,TweenInfo.new(1),{TextTransparency=1}):Play()
+
+print("[✅] LagFix Mode Activated — Map hidden, Player kept.")
 
 --------------------------------------------------------------------
 --------------------------[ FPS + PING GUI KÍNH ]--------------------
