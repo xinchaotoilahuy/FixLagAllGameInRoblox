@@ -1,160 +1,100 @@
 --------------------------------------------------------------------
 ------------------------[ LAG REDUCER SCRIPT ]-----------------------
---// ☠️ Invisible Map Mode (Keep Player Safe) — by VNTK
--- Giữ nguyên character của player, xóa mọi thứ khác trong workspace
--- ⚠️ Lưu ý: map vẫn bị xóa hoàn toàn (rejoin để phục hồi)
+--// ⚡ Ultimate LagFix + FX Cleaner — by VNTK
 
-local player = game.Players.LocalPlayer
-local Lighting = game:GetService("Lighting")
-local TweenService = game:GetService("TweenService")
+local player=game.Players.LocalPlayer
+local Lighting=game:GetService("Lighting")
+local TweenService=game:GetService("TweenService")
 
--- == intro (giữ nguyên hiệu ứng cũ) ==
-local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.IgnoreGuiInset = true
-gui.ResetOnSpawn = false
-gui.Name = "LagIntro"
+--== GUI intro ==
+local gui=Instance.new("ScreenGui",player:WaitForChild("PlayerGui"))
+gui.IgnoreGuiInset=true gui.ResetOnSpawn=false gui.Name="LagIntro"
 
-local blur = Instance.new("BlurEffect", Lighting)
-blur.Size = 0
-TweenService:Create(blur, TweenInfo.new(.6, Enum.EasingStyle.Sine), {Size = 25}):Play()
+local blur=Instance.new("BlurEffect",Lighting)
+blur.Size=0 TweenService:Create(blur,TweenInfo.new(.6,Enum.EasingStyle.Sine),{Size=25}):Play()
 
-local text = Instance.new("TextLabel", gui)
-text.AnchorPoint = Vector2.new(0.5, 0.5)
-text.Position = UDim2.new(0.5, 0, 0.5, 0)
-text.BackgroundTransparency = 1
-text.TextColor3 = Color3.fromRGB(255,255,255)
-text.TextScaled = true
-text.Font = Enum.Font.FredokaOne
-text.TextTransparency = 1
+local text=Instance.new("TextLabel",gui)
+text.AnchorPoint=Vector2.new(0.5,0.5)
+text.Position=UDim2.new(0.5,0,0.5,0)
+text.BackgroundTransparency=1
+text.TextColor3=Color3.fromRGB(255,255,255)
+text.TextScaled=true
+text.Font=Enum.Font.FredokaOne
+text.TextTransparency=1
 
-local glow = Instance.new("UIStroke", text)
-glow.Thickness = 2
-glow.Color = Color3.fromRGB(0,180,255)
-glow.Transparency = 0.4
+local glow=Instance.new("UIStroke",text)
+glow.Thickness=2 glow.Color=Color3.fromRGB(0,180,255) glow.Transparency=0.4
 
-local function cinematicShow(txt, time, dur)
-	text.Text = txt
-	text.Size = UDim2.new(0,0,0.2,0)
-	text.TextTransparency = 1
-	local grow = TweenService:Create(text, TweenInfo.new(.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-		{Size = UDim2.new(0.9,0,0.25,0), TextTransparency = 0})
-	local shrink = TweenService:Create(text, TweenInfo.new(.4, Enum.EasingStyle.Sine, Enum.EasingDirection.In),
-		{Size = UDim2.new(0.5,0,0.18,0), TextTransparency = 1})
-	grow:Play()
-	task.wait(time)
-	shrink:Play()
-	task.wait(dur or 0)
+local function cinematicShow(txt,time,dur)
+	text.Text=txt
+	text.Size=UDim2.new(0,0,0.2,0)
+	text.TextTransparency=1
+	local grow=TweenService:Create(text,TweenInfo.new(.6,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),
+		{Size=UDim2.new(0.9,0,0.25,0),TextTransparency=0})
+	local shrink=TweenService:Create(text,TweenInfo.new(.4,Enum.EasingStyle.Sine,Enum.EasingDirection.In),
+		{Size=UDim2.new(0.5,0,0.18,0),TextTransparency=1})
+	grow:Play() task.wait(time) shrink:Play() task.wait(dur or 0)
 end
 
-cinematicShow("Script Fix Lag by VNTK", 1.1, 0.25)
-cinematicShow("Enjoy :))", 0.65, 0.25)
+cinematicShow("Script Fix Lag by VNTK",1.1,0.25)
+cinematicShow("Enjoy :))",0.65,0.25)
 
-TweenService:Create(blur, TweenInfo.new(1.3, Enum.EasingStyle.Sine), {Size = 0}):Play()
-task.wait(1.4)
-gui:Destroy()
-blur:Destroy()
+TweenService:Create(blur,TweenInfo.new(1.3,Enum.EasingStyle.Sine),{Size=0}):Play()
+task.wait(1.3)
+blur:Destroy() gui:Destroy()
 
--- == Bảo vệ player ==
-local function isProtected(inst)
-	-- bảo vệ character hiện tại (nếu có)
-	local char = player.Character
-	if char and (inst == char or inst:IsDescendantOf(char)) then
-		return true
-	end
-	-- bảo vệ CurrentCamera (tránh hỏng view)
-	if workspace.CurrentCamera and (inst == workspace.CurrentCamera or inst:IsDescendantOf(workspace.CurrentCamera)) then
-		return true
-	end
-	-- bảo vệ PlayerGui & Player objects (nếu có thể)
-	if inst:IsDescendantOf(player) or inst:IsDescendantOf(player:FindFirstChild("PlayerGui") or {}) then
-		return true
-	end
-	-- giữ các thứ quan trọng khác (nếu cần mở rộng)
-	return false
-end
-
--- == Xóa/clear Lighting effects ==
+--== Lag Fix ==
 pcall(function()
-	for _, v in ipairs(Lighting:GetChildren()) do
-		if v:IsA("Sky") or v:IsA("Atmosphere") or v:IsA("BloomEffect")
-		or v:IsA("ColorCorrectionEffect") or v:IsA("SunRaysEffect")
-		or v:IsA("DepthOfFieldEffect") or v:IsA("BlurEffect") then
-			v:Destroy()
-		end
+	Lighting.GlobalShadows=false
+	Lighting.Brightness=0
+	Lighting.FogEnd=9e9
+	Lighting.FogStart=0
+	Lighting.ClockTime=12
+	Lighting.Ambient=Color3.new(1,1,1)
+	Lighting.OutdoorAmbient=Color3.new(1,1,1)
+	for _,v in ipairs(Lighting:GetChildren())do
+		if v:IsA("Sky")or v:IsA("Atmosphere")or v:IsA("BloomEffect")
+		or v:IsA("ColorCorrectionEffect")or v:IsA("SunRaysEffect")
+		or v:IsA("DepthOfFieldEffect")or v:IsA("BlurEffect")then v:Destroy()end
 	end
-	Lighting.FogEnd = 1
-	Lighting.GlobalShadows = false
-	Lighting.Brightness = 0
-	Lighting.Ambient = Color3.new(0,0,0)
-	Lighting.OutdoorAmbient = Color3.new(0,0,0)
 end)
 
--- == Hủy map (an toàn) ==
-local function wipeChild(child)
-	if not child then return end
-	-- không chạm vào phần tử được bảo vệ
-	if isProtected(child) then return end
-	-- Terrain: clear, không destroy workspace.Terrain object (an toàn hơn)
-	if child:IsA("Terrain") or child:IsA("TerrainRegion") then
-		pcall(function() workspace.Terrain:Clear() end)
-		return
-	end
-	-- nếu là model hoặc folder thì destroy toàn bộ (nếu không protected)
+for _,v in ipairs(game:GetDescendants())do
 	pcall(function()
-		child:Destroy()
+		if v:IsA("BasePart")then
+			v.Material=Enum.Material.Plastic v.CastShadow=false v.Reflectance=0 v.LocalTransparencyModifier=1
+		elseif v:IsA("Decal")or v:IsA("Texture")then v.Transparency=1
+		elseif v:IsA("ParticleEmitter")or v:IsA("Trail")or v:IsA("Beam")
+		or v:IsA("Smoke")or v:IsA("Fire")or v:IsA("Sparkles")then v.Enabled=false
+		end
 	end)
 end
 
--- Xóa tất cả children của workspace ngoại trừ player character và các object bảo vệ
-for _, c in ipairs(workspace:GetChildren()) do
-	-- skip Lighting-like or services accidentally parented (nếu có)
-	if c ~= workspace.CurrentCamera then
-		wipeChild(c)
-	end
-end
-
--- Nếu có object mới được spawn vào workspace, xóa nếu không phải của player
-workspace.ChildAdded:Connect(function(c)
-	-- đợi 1 tick để nếu đó là character thì isProtected nhận diện được
-	task.wait(0.05)
-	if not isProtected(c) then
-		-- nếu là Terrain, clear
-		if c:IsA("Terrain") then
-			pcall(function() workspace.Terrain:Clear() end)
-			return
-		end
-		pcall(function() c:Destroy() end)
-	end
+game.DescendantAdded:Connect(function(v)
+	pcall(function()
+		if v:IsA("BasePart")then
+			v.Material=Enum.Material.Plastic v.CastShadow=false v.LocalTransparencyModifier=1
+		elseif v:IsA("Decal")or v:IsA("Texture")then v.Transparency=1
+		elseif v:IsA("ParticleEmitter")or v:IsA("Trail")or v:IsA("Beam")
+		or v:IsA("Smoke")or v:IsA("Fire")or v:IsA("Sparkles")then v.Enabled=false end
+	end)
 end)
 
--- Ngoài ra xóa các texture/decals/effect còn sót
-for _, v in ipairs(game:GetDescendants()) do
+--== Xóa toàn bộ hiệu ứng chiêu ==
+local function clearFX(v)
 	pcall(function()
-		if isProtected(v) then return end
-		if v:IsA("Decal") or v:IsA("Texture") or v:IsA("SurfaceAppearance") then
-			v:Destroy()
-		elseif v:IsA("ParticleEmitter") or v:IsA("Beam") or v:IsA("Trail")
-			or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") then
+		if v:IsA("ParticleEmitter") or v:IsA("Beam") or v:IsA("Trail") or v:IsA("Attachment")
+		or v:IsA("Smoke") or v:IsA("Fire") or v:IsA("Explosion") or v:IsA("Sparkles")
+		or v:IsA("Sound") or v:IsA("Light") then
 			v:Destroy()
 		end
 	end)
 end
 
--- Hiển thị thông báo nhỏ góc phải
-local notif = Instance.new("TextLabel", player:WaitForChild("PlayerGui"))
-notif.AnchorPoint = Vector2.new(1,1)
-notif.Position = UDim2.new(1, -15, 1, -10)
-notif.BackgroundTransparency = 1
-notif.TextColor3 = Color3.fromRGB(0,255,100)
-notif.Font = Enum.Font.GothamBold
-notif.TextSize = 20
-notif.Text = "LagFix Mode Activated ✅"
-notif.TextTransparency = 1
-TweenService:Create(notif, TweenInfo.new(0.6), {TextTransparency = 0}):Play()
-task.wait(3)
-TweenService:Create(notif, TweenInfo.new(0.6), {TextTransparency = 1}):Play()
+for _,v in ipairs(game:GetDescendants()) do clearFX(v) end
+game.DescendantAdded:Connect(clearFX)
 
-print("[✅] Safe Invisible Map: map removed, player preserved.")
+print("[✅] LagFix + FX Cleaner ON — All effects removed, performance boosted.")
 
 --------------------------------------------------------------------
 --------------------------[ FPS + PING GUI KÍNH ]--------------------
