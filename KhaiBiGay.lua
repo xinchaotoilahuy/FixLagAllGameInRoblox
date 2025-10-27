@@ -1,6 +1,6 @@
 --------------------------------------------------------------------
 ------------------------[ LAG REDUCER SCRIPT ]-----------------------
---// ⚡ Ultimate LagFix + FX Cleaner + Cinematic Intro — by PhanGiaHuy x GPT-5 x VNTK
+--// ⚡ Ultimate LagFix + FX Cleaner + Cinematic Intro — by VNTK
 
 local player=game.Players.LocalPlayer
 local Lighting=game:GetService("Lighting")
