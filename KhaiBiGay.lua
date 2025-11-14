@@ -45,7 +45,7 @@ end
 
 -- intro text
 cinematicShow("Script Fix Lag by VNTK",1.1,0.25)
-cinematicShow("Enjoy :))",0.65,0.25)
+cinematicShow("Let's gooo",0.65,0.25)
 
 TweenService:Create(blur,TweenInfo.new(1.3,Enum.EasingStyle.Sine),{Size=0}):Play()
 task.wait(1.3)
